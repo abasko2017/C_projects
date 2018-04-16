@@ -1,0 +1,123 @@
+#include <iostream>          //standard library for i/o
+#include <string>
+
+using namespace std;
+
+//Below are the prototypes of functions Input, Output, and the Process
+void Input(string & cell_number, int & relays, int & call_length);
+void Output(const string cell_number, const int relays, const int call_length, const double & net_cost, const double & call_tax,
+	        const double & total_cost_of_call);
+void Process(const int relays, const int call_length, double & net_cost, double & call_tax, double & total_cost_of_call);
+
+//Implementing function Input
+///*************************************************************************************
+//Name:  Input
+//Precondition: User is ready to enter values correctly
+//Postcondition: The value of cell_number has being set to the phone number entered. The value of relays has being set to the number
+                //of relay stations used. The value of call length has being set to the duration of call in minutes
+//Description:  The function will record the cell phone number, number of relay stations, and the length of the call in minutes from the user
+
+void Input(string & cell_number, int & relays, int & call_length) // these are all formal parameter using the call by reference mechanism
+                                                                  //in C++
+{
+	cout << "Enter your Cell Phone Number: "; //prompts the user to enter cell phone number
+	cin >> cell_number;
+	cout << "Enter the number of relay stations: "; //prompts the user to enter the number of the relay stations
+	cin >> relays;
+	cout << "Enter the length of the call in minutes: "; //prompts the user to enter the length of the call in minutes
+	cin >> call_length;
+}
+
+//Implementing function Output
+///*************************************************************************************
+//Name:  Output
+//Precondition: The value of cell_number has being set to the phone number entered. The value of relays has being set to the number
+//              of relay stations used. The value of call_length has being set to the duration of call in minutes. Net_cost is the 
+//              calculated cost of the call, call_tax is the calculated tax on the call, total_cost_of_call is the calculated
+//              amount of the total cost of the call user will be charged
+//Postcondition: The values of cell_number, relays, call_length, net_cost, call_tax, and total_cost_of_call have been written to the screen
+//Description:  Describe what the function does (purpose).
+//*************************************************************************************
+
+void Output(const string cell_number, const int relays, const int call_length, const double & net_cost, const double & call_tax,
+	        const double & total_cost_of_call)
+{
+	//The statements below are used to help to format the output to 2 digits
+	cout.setf(ios::showpoint);
+	cout.precision(2);
+	cout.setf(ios::fixed);
+
+	//The actual output on the screen is as follows
+	cout << "**************************************************************"<<endl;
+	cout << "Cell Phone Number:           " << cell_number << endl;
+	cout << "**************************************************************"<<endl;
+	cout << "Number of Relay Stations:          " << relays << endl;
+	cout << "Length of Call in Minutes:         " << call_length << endl;
+	cout << "Net Cost of Call:                  " << net_cost << endl;
+	cout << "Tax of Call:                       " << call_tax << endl;
+	cout << "Total Cost of Call:                " << total_cost_of_call << endl;
+	cout << "**************************************************************" << endl << endl;
+
+}
+
+//Implementing function Process
+///*************************************************************************************
+//Name:  Process
+//Precondition: Relays is the number of relay stations used, call_length is the length of the call
+//Postcondition: Returns the values of computed net cost of the call, call tax, and the total cost of the call
+//Description:  The function computes the net cost of the call, tax on the call, and the total cost of the call based on the number
+//              of relay stations used and the length of the call
+//*************************************************************************************
+
+void Process(const int relays, const int call_length, double & net_cost, double & call_tax, double & total_cost_of_call)
+{
+	double tax_rate;
+
+	//below we determine the effective tax rate based on the number of relay stations using the if conditions
+	if (relays >= 0 && relays <= 5)
+		tax_rate = 0.01;
+
+	else if (relays >= 6 && relays <= 11)
+		tax_rate = 0.03;
+
+	else if (relays >= 12 && relays <= 20)
+		tax_rate = 0.05;
+
+	else if (relays >= 21 && relays <= 50)
+		tax_rate = 0.08;
+
+	else if (relays > 50)
+		tax_rate = 0.12;
+
+	net_cost = (relays / 50.0)*0.40*(call_length); //calculating the net cost of the call
+	call_tax = net_cost*tax_rate;                  //calculating the call tax
+	total_cost_of_call = net_cost + call_tax;              //calculating the total cost of the call
+}
+
+//the main body of the program where the functions will be executed
+int main()
+{
+	string cell_number;
+	int relays;
+	int  call_length;
+	double net_cost;
+	double call_tax;
+	double total_cost_of_call;
+	string user_response = "y";
+
+	while (user_response == "y" || user_response == "Y") /*starting the loop to let user enter phone number as many times
+														 as they would like*/
+	{
+
+	Input(cell_number, relays, call_length); //Executing the Input function
+	Process(relays, call_length, net_cost, call_tax, total_cost_of_call); //Executing the Process function
+	Output(cell_number, relays, call_length, net_cost, call_tax, total_cost_of_call); //Executing the Output function
+	
+	cout << "Would you like to do another calculation (Y or N): " << endl; /*part of the loop asking the user if they would like to
+																		   perform another calculation */
+	cin >> user_response;
+	cout << endl;
+	}
+
+	return 0;
+}
